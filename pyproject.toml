@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "fastapi-authentication"
+version = "0.1.0"
+description = "custom fastAPI authentication"
+authors = ["podrivnick <ribakov1973@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.112.2"
+uvicorn = "^0.30.6"
+passlib = "^1.7.4"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+alembic = "^1.13.2"
+asyncpg = "^0.29.0"
+sqlalchemy = "^2.0.32"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+pyupgrade = "^3.17.0"
+add-trailing-comma = "^3.1.0"
+autoflake = "^2.3.1"
+docformatter = "^1.7.5"
+flake8-builtins = "^2.5.0"
+flake8-commas = "^4.0.0"
+flake8-debugger = "^4.1.2"
+flake8-comprehensions = "^3.15.0"
+flake8-eradicate = "^1.5.0"
+dlint = "^0.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,21 @@
+services:
+  app-drf-shop:
+    build:
+      context: ../../DRF-Shop/
+      dockerfile: Dockerfile
+    container_name: app-drf-shop
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    command: "sh /entrypoint.sh"
+    env_file:
+      - ../.env
+    depends_on:
+      - postgres
+    networks:
+      - ppostgres.network
+
+networks:
+  ppostgres.network:
+    driver: bridge
