@@ -19,12 +19,6 @@ repos:
       - id: add-trailing-comma
         args: [--py36-plus]
 
-
--   repo: https://github.com/psf/black
-    rev: 23.3.0
-    hooks:
-      - id: black
-
 -   repo: https://github.com/myint/autoflake
     rev: v2.2.1
     hooks:
@@ -71,3 +65,10 @@ repos:
           - flake8-comprehensions>=3.3.1
           - flake8-eradicate>=1.0.0
           - dlint>=0.11.0
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.2
+    hooks:
+      - id: ruff-format
+      - id: ruff
+        args: [ --fix ]
