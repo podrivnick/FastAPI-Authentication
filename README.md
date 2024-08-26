@@ -1,4 +1,4 @@
-# FastAPI-ToDoCalendar
+# FastAPI-Authentication
 
 A non-commercial FastAPI project for user registration, authentication and authorization.
 ### Installation and Running
@@ -18,8 +18,8 @@ ___
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/podrivnick/FastAPI-ToDoCalendar.git
-   cd FastAPI-authentication
+   git clone https://github.com/podrivnick/FastAPI-Authentication.git
+   cd FastAPI-Authentication
    ```
 
 2. Install all required packages in `Requirements` section.
@@ -35,7 +35,7 @@ ___
 
 ### Specific Commands
 
-* `make storages` - up only storages. you should run your application locally for debugging/developing purposes 
+* `make storages` - up only storages. you should run your application locally for debugging/developing purposes
 * `make storages-logs` - follow the logs in storages containers
 * `make storages-down` - down all infrastructure
 * `make appbash` - enter into application container
@@ -44,7 +44,7 @@ ___
 ## Structure
 
 ```plaintext
-FastAPI-authentication/
+FastAPI-Authentication/
 ```
 
 ## Technology
@@ -62,5 +62,3 @@ ___
 
 ## Author
 Author of the backend: ***Rybakov Artem***  (https://github.com/podrivnick)
-
-Author of the frontend-calendar: **https://github.com/opensource-coding/Responsive-Calendar-with-Events**

@@ -1,9 +1,9 @@
 services:
-  app-drf-shop:
+  app-drf-authentication:
     build:
-      context: ../../DRF-Shop/
+      context: ../../FastAPI-Authentication/
       dockerfile: Dockerfile
-    container_name: app-drf-shop
+    container_name: app-drf-authentication
     ports:
       - "8000:8000"
     expose:

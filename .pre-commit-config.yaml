@@ -1,23 +1,34 @@
 fail_fast: false
 exclude: ^.*\b(migrations)\b.*$
 repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
 
 -   repo: https://github.com/asottile/pyupgrade
     rev: v2.31.1
     hooks:
-    -   id: pyupgrade
+      - id: pyupgrade
         args: [--py38-plus]
 
 -   repo: https://github.com/asottile/add-trailing-comma
     rev: v3.1.0
     hooks:
-    -   id: add-trailing-comma
+      - id: add-trailing-comma
         args: [--py36-plus]
+
+
+-   repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
 
 -   repo: https://github.com/myint/autoflake
     rev: v2.2.1
     hooks:
-    -   id: autoflake
+      - id: autoflake
         args: [
             --in-place,
             --remove-all-unused-imports,
@@ -28,31 +39,26 @@ repos:
 -   repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
-    -   id: isort
+      - id: isort
 
-  - repo: https://github.com/hadolint/hadolint
+-   repo: https://github.com/hadolint/hadolint
     rev: v2.12.0
     hooks:
       - id: hadolint-docker
 
--  repo: https://github.com/myint/docformatter
-   rev: v1.7.5
-   hooks:
-     - id: docformatter
-       args: [
+-   repo: https://github.com/myint/docformatter
+    rev: v1.7.5
+    hooks:
+      - id: docformatter
+        args: [
            --in-place,
            --blank,
-       ]
-
--  repo: https://github.com/charliermarsh/ruff
-   rev: v0.6.2
-   hooks:
-    - id: ruff
+        ]
 
 -   repo: https://github.com/pycqa/flake8
     rev: 7.0.0
     hooks:
-    -   id: flake8
+      - id: flake8
         args: [
           --config=.flake8,
           --max-line-length=120,
