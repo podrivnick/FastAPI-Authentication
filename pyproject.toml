@@ -16,6 +16,10 @@ alembic = "^1.13.2"
 asyncpg = "^0.29.0"
 sqlalchemy = "^2.0.32"
 didiator = "^0.3.1"
+orjson = "^3.10.7"
+adaptix = "^3.0.0b7"
+python-dotenv = "^1.0.1"
+uuid6 = "^2024.7.10"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -94,8 +98,8 @@ sections=[
 [tool.ruff]
 line-length = 88
 exclude = ["migrations", ".git"]
-extend-ignore = ["E501", "F401"]
-select = ["E", "F", "W"]
+lint.extend-ignore = ["E501", "F401"]
+lint.select = ["E", "F", "W"]
 
 
 [lint.mccabe]

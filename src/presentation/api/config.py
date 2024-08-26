@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from config import (
+from settings.config import (
     API_HOST,
     API_PORT,
 )
