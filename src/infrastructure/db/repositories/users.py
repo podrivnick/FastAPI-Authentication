@@ -1,22 +1,22 @@
 from uuid import UUID
 
-from sqlalchemy import select
-from src.application.user import dto
-from src.application.user.exceptions import (
+from application.user import dto
+from application.user.exceptions import (
     UserIdNotExistError,
     UsernameNotExistError,
 )
-from src.application.user.interfaces.persistence import (
+from application.user.interfaces.persistence import (
     GetUsersFilters,
     UserReader,
 )
-from src.infrastructure.db.converters import (
+from infrastructure.db.converters import (
     convert_db_model_to_active_user_dto,
     convert_db_model_to_user_dto,
 )
-from src.infrastructure.db.exception_mapper import exception_mapper
-from src.infrastructure.db.models.user import User
-from src.infrastructure.db.repositories.base import SQLAlchemyRepo
+from infrastructure.db.exception_mapper import exception_mapper
+from infrastructure.db.models.user import User
+from infrastructure.db.repositories.base import SQLAlchemyRepo
+from sqlalchemy import select
 
 
 class UserReaderImpl(SQLAlchemyRepo, UserReader):

@@ -415,6 +415,20 @@ test = ["certifi", "cryptography-vectors (==43.0.0)", "pretend", "pytest (>=6.2.
 test-randomorder = ["pytest-randomly"]
 
 [[package]]
+name = "didiator"
+version = "0.3.1"
+description = "A library that implements the Mediator pattern and uses DI library"
+optional = false
+python-versions = ">=3.10,<4.0"
+files = [
+    {file = "didiator-0.3.1-py3-none-any.whl", hash = "sha256:0fd3d3af901241a457beae81853e91444de46cb2a4fcbeb9ed1fb91fb4ad65b4"},
+    {file = "didiator-0.3.1.tar.gz", hash = "sha256:05375f397ce73ee52934b6da823d439a263cde33579e10589d93944eb9c2e0b3"},
+]
+
+[package.extras]
+di = ["di[anyio] (>=0.75.0,<0.76.0)"]
+
+[[package]]
 name = "distlib"
 version = "0.3.8"
 description = "Distribution utilities"
@@ -1373,4 +1387,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "5cf26fa743dc0c8bc65b99ca21f58379730bb2c10ac1e390a717e9dccac806e9"
+content-hash = "bf1ca9abd9ce701fec565e1c517fe913fd4e42b2ba68cc8a73dfa887b165756b"

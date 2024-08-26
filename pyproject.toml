@@ -15,6 +15,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 alembic = "^1.13.2"
 asyncpg = "^0.29.0"
 sqlalchemy = "^2.0.32"
+didiator = "^0.3.1"
 
 
 [tool.poetry.group.dev.dependencies]

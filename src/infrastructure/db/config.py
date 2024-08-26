@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 
+from config import (
+    DATABASE_HOST,
+    DATABASE_NAME,
+    DATABASE_PASSWORD,
+    DATABASE_PORT,
+    DATABASE_USER,
+)
+
 
 @dataclass
 class DBConfig:
-    DATABASE_HOST: str = "postgres"
-    DATABASE_PORT: int = 5432
-    DATABASE_NAME: str = "auth_fastapi"
-    DATABASE_USER: str = "postgres"
-    DATABASE_PASSWORD: str = "1234"
-
     @property
     def full_url(self) -> str:
-        return f"postgresql+asyncpg://%{self.DATABASE_USER}s:%{self.DATABASE_PASSWORD}s@%{self.DATABASE_HOST}s:%{self.DATABASE_PORT}s/%{self.DATABASE_NAME}s?async_fallback=True"
+        return f"postgresql+asyncpg://%{DATABASE_USER}s:%{DATABASE_PASSWORD}s@%{DATABASE_HOST}s:%{DATABASE_PORT}s/%{DATABASE_NAME}s?async_fallback=True"

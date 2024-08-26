@@ -30,4 +30,4 @@ wait_for_port "postgres" 5432
 
 # Запуск Django-приложения (или другого приложения)
 echo "Запуск приложения..."
-exec poetry run python src/app.py
+exec poetry run uvicorn main:main --workers 4

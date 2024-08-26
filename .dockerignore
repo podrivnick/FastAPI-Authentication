@@ -7,6 +7,7 @@
 .idea/
 .git/
 .vscode/
+.ruff_cache/
 
 docker_compose/
 __pycache__/
