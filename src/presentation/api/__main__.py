@@ -1,16 +1,15 @@
 import asyncio
 
-from presentation.api.config import APIConfig
-from presentation.api.main import (
+from src.presentation.api.config import APIConfig
+from src.presentation.api.main import (
     init_api,
     run_api,
 )
-
-from .config import DEBUG
+from src.settings.config import DEBUG
 
 
 async def main() -> None:
-    app = init_api(DEBUG)
+    app = await init_api(DEBUG)
 
     await run_api(app, APIConfig)
 

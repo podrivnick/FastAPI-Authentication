@@ -5,9 +5,12 @@ EXEC = docker exec -it
 LOGS = docker logs
 ENV_FILE = --env-file .env
 APP_CONTAINER = app-drf-authentication
+DB_CONTAINER = ppostgres
 INTO_BASH = /bin/bash
-RUN_MIGRATION = poetry run alembic upgrade b85ad2740d7d
-ENTER_POSTGRES_CONTAINER = psql -U postgres -d calendar
+ENTER_POSTGRES_CONTAINER = psql -U postgres
+INTO_BASH_FOR_MIGRATE = /bin/bash -c
+CD_SRC = cd src &&
+RUN_MIGRATION = poetry run alembic upgrade c2366c392782
 
 
 .PHONY: app
@@ -25,3 +28,11 @@ app-down:
 .PHONY: appbash
 appbash:
 	${EXEC} ${APP_CONTAINER} ${INTO_BASH}
+
+.PHONY: migrate
+migrate:
+	${EXEC} ${APP_CONTAINER} ${INTO_BASH_FOR_MIGRATE} "${RUN_MIGRATION}"
+
+.PHONY: dbbash
+dbbash:
+	${EXEC} ${DB_CONTAINER} ${ENTER_POSTGRES_CONTAINER}

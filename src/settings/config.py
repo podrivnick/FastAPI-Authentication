@@ -15,5 +15,5 @@ SECRET_KEY_AUTH = os.environ.get("SECRET_KEY_AUTH")
 
 DEBUG = os.environ.get("DEBUG")
 
-API_PORT = os.environ.get("API_PORT")
+API_PORT = int(os.environ.get("API_PORT"))
 API_HOST = os.environ.get("API_HOST")

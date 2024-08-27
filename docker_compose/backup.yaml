@@ -5,8 +5,8 @@ services:
     networks:
       - ppostgres.network
     environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=${DATABASE_NAME:-${DATABASE_USER:-$USER}}
+      - DATABASE_HOST=postgres
+      - DATABASE_NAME=${DATABASE_NAME:-${DATABASE_USER:-$USER}}
       - DATABASE_USER=${DATABASE_USER:-$USER}
       - DATABASE_PASSWORD=$DATABASE_PASSWORD
       - BACKUP_DIR=/backups

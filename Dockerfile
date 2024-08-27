@@ -10,7 +10,9 @@ ENV PYTHONDONTWRITEBYTECODE 1 \
     POETRY_NO_INTERACTION=1 \
     VENV_PATH="/opt/pysetup/.venv"
 
-WORKDIR /src
+ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+
+WORKDIR /app
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends python3-dev \
@@ -22,7 +24,7 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml /src
+COPY pyproject.toml /app
 
 RUN pip install --upgrade --no-cache-dir pip==24.0 \
  && pip install --no-cache-dir poetry==1.8.2
@@ -30,9 +32,15 @@ RUN pip install --upgrade --no-cache-dir pip==24.0 \
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-root --no-interaction --no-ansi
 
-COPY /src/* /src/
+COPY alembic.ini /app
+
+COPY ./backups /app
+
+COPY ./config /app/config
+COPY ./src /app/src
+
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-CMD ["poetry", "run", "python", "-Om", "src.main:main"]
+CMD ["python", "-Om", "src"]

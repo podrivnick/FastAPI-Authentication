@@ -12,7 +12,7 @@ services:
       - ../.env
     depends_on:
       - postgres
-    command: ["poetry", "run", "python", "-Om", "src.main:main"]
+    command: ["python", "-Om", "src"]
     networks:
       - ppostgres.network
 
