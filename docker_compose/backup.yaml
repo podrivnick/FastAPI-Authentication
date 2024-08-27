@@ -5,10 +5,10 @@ services:
     networks:
       - ppostgres.network
     environment:
-      - DATABASE_HOST=postgres
-      - DATABASE_NAME=${DATABASE_NAME:-${DATABASE_USER:-$USER}}
-      - DATABASE_USER=${DATABASE_USER:-$USER}
-      - DATABASE_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=${POSTGRES_DB:-${POSTGRES_USER:-$USER}}
+      - POSTGRES_USER=${POSTGRES_USER:-$USER}
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - BACKUP_DIR=/backups
       - POSTGRES_EXTRA_OPTS=-Z6 --schema=public --blobs
       - SCHEDULE=${POSTGRES_BACKUP_SCHEDULE:-@daily}

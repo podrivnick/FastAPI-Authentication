@@ -34,8 +34,6 @@ RUN poetry install --no-root --no-interaction --no-ansi
 
 COPY alembic.ini /app
 
-COPY ./backups /app
-
 COPY ./config /app/config
 COPY ./src /app/src
 

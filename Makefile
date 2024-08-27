@@ -1,5 +1,6 @@
 DC = docker-compose
 STORAGES_FILE = docker_compose/storages.yaml
+STORAGES_BACKUP_FILE = docker_compose/backup.yaml
 APP_FILE = docker_compose/app.yaml
 EXEC = docker exec -it
 LOGS = docker logs
@@ -7,15 +8,14 @@ ENV_FILE = --env-file .env
 APP_CONTAINER = app-drf-authentication
 DB_CONTAINER = ppostgres
 INTO_BASH = /bin/bash
-ENTER_POSTGRES_CONTAINER = psql -U postgres
+ENTER_POSTGRES_CONTAINER = psql -U postgres -d auth
 INTO_BASH_FOR_MIGRATE = /bin/bash -c
-CD_SRC = cd src &&
 RUN_MIGRATION = poetry run alembic upgrade c2366c392782
 
 
 .PHONY: app
 app:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} ${ENV_FILE} up -d
+	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} -f ${STORAGES_BACKUP_FILE} ${ENV_FILE} up -d
 
 .PHONY: app-logs
 app-logs:
