@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from src.domain.user.events.create_user import CreateUser
+from src.domain.user import events
 
 
 user_router = APIRouter(
@@ -9,25 +9,27 @@ user_router = APIRouter(
 
 
 @user_router.post(
-    "create_user",
+    "/create_user",
 )
 async def create_user(
-    create_user: CreateUser,
-):
-    return CreateUser
+    create_user: events.CreateUser,
+) -> events.CreateUser:
+    return events.CreateUser
 
 
-# @user_router.post(
-#     "authorization",
-#     status_code=status.HTTP_201_CREATED,
-# )
-# async def login():
-#     return
+@user_router.post(
+    "/authorization",
+)
+async def login(
+    user_login: events.AuthorizeUser,
+) -> events.AuthorizeUser:
+    return events.AuthorizeUser
 
 
-# @user_router.post(
-#     "logout",
-#     status_code=status.HTTP_201_CREATED,
-# )
-# async def logout():
-#     return
+@user_router.post(
+    "/logout",
+)
+async def logout(
+    logout_user: events.LogoutUser,
+) -> events.LogoutUser:
+    return events.LogoutUser
