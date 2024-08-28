@@ -57,11 +57,21 @@ async def login(
     return authorisation_code
 
 
-@user_router.post(
+@user_router.delete(
     "/logout",
+    response_model=None,
 )
 async def logout(
     logout_user: events.LogoutUser,
     session: AsyncSession = Depends(get_async_session),
 ) -> events.LogoutUser:
-    return logout_user
+    query = UserAccount(session)
+
+    is_deleted = await query.logout(token_schema=logout_user)
+    if not is_deleted:
+        raise ValueError("Token doesn't exist")
+
+    return {
+        "message": "User logged out successfully",
+        "logout_user": logout_user,
+    }

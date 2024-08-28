@@ -12,7 +12,7 @@ ENV PYTHONDONTWRITEBYTECODE 1 \
 
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
-WORKDIR /app
+WORKDIR /FastAPI-Authentication
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends python3-dev \
@@ -24,7 +24,7 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml /app
+COPY pyproject.toml /FastAPI-Authentication
 
 RUN pip install --upgrade --no-cache-dir pip==24.0 \
  && pip install --no-cache-dir poetry==1.8.2
@@ -32,9 +32,9 @@ RUN pip install --upgrade --no-cache-dir pip==24.0 \
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-root --no-interaction --no-ansi
 
-COPY alembic.ini /app
+COPY alembic.ini /FastAPI-Authentication
 
-COPY ./config /app/config
-COPY ./src /app/src
+COPY ./config /FastAPI-Authentication/config
+COPY ./src /FastAPI-Authentication/src
 
 CMD ["python", "-Om", "src"]

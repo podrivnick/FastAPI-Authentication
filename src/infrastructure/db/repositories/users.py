@@ -25,7 +25,8 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
         print("Waiting for redis...")
         connection = await asyncio_redis.Connection.create(host="redis", port=6379)
 
-        await connection.set(user_login.username, code)
+        key = f"token:{code}"
+        await connection.set(key, code)
 
         connection.close()
 
@@ -33,8 +34,32 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
 
     async def logout(
         self,
-    ) -> None:
-        pass  # Implement logout logic here.
+        token_schema: events.LogoutUser,
+    ) -> bool:
+        is_deleted = False
+
+        print("Waiting for redis...")
+
+        try:
+            connection = await asyncio_redis.Connection.create(host="redis", port=6379)
+            print(f"Looking for token: {token_schema.token}")
+
+            key = f"token:{token_schema.token}"
+            is_token_exist = await connection.get(key)
+
+            if is_token_exist:
+                print("Deleting token...")
+                await connection.delete([key])
+                is_deleted = True
+            else:
+                print("Token doesn't exist")
+        except Exception as e:
+            print(f"Error interacting with Redis: {e}")
+            raise
+        finally:
+            connection.close()
+
+        return is_deleted
 
 
 class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
@@ -42,9 +67,6 @@ class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
         self,
         filtering_data: Dict[str, Any],
     ) -> dto.User:
-        # user: User | None = await self._session.scalar(
-        #     select(User).where(User.username == username),
-        # )
         stmt = select(User).filter_by(**filtering_data)
         user = await self._session.execute(stmt)
 
