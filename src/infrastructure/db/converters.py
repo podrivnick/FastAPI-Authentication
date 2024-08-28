@@ -16,7 +16,5 @@ def convert_db_model_to_user_entity(
     user: models.User,
 ) -> entities.User:
     return entities.User(
-        id=user.id,
         username=user.username,
-        full_name=user.full_name,
     )

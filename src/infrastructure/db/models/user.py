@@ -27,3 +27,4 @@ class User(TimedBaseModel):
     first_name: Mapped[str]
     last_name: Mapped[str]
     middle_name: Mapped[str | None] = mapped_column(default=None)
+    password: Mapped[str] = mapped_column(nullable=False)

@@ -10,7 +10,7 @@ DB_CONTAINER = ppostgres
 INTO_BASH = /bin/bash
 ENTER_POSTGRES_CONTAINER = psql -U postgres -d auth
 INTO_BASH_FOR_MIGRATE = /bin/bash -c
-RUN_MIGRATION = poetry run alembic upgrade c2366c392782
+RUN_MIGRATION = poetry run alembic upgrade 3a4415bed66f
 
 
 .PHONY: app
