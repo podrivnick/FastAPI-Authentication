@@ -1,3 +1,8 @@
+from typing import (
+    Any,
+    Dict,
+)
+
 import asyncio_redis
 from sqlalchemy import select
 from src.application import (
@@ -35,13 +40,17 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
 class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
     async def get_user_by_username(
         self,
-        username: str,
+        filtering_data: Dict[str, Any],
     ) -> dto.User:
-        user: User | None = await self._session.scalar(
-            select(User).where(User.username == username),
-        )
+        # user: User | None = await self._session.scalar(
+        #     select(User).where(User.username == username),
+        # )
+        stmt = select(User).filter_by(**filtering_data)
+        user = await self._session.execute(stmt)
 
-        return user
+        result_user = user.scalars().first()
+
+        return result_user
 
     async def create_user(
         self,

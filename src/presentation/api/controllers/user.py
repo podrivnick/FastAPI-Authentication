@@ -27,7 +27,7 @@ async def create_user(
 ) -> events.CreateUser:
     query = UserReaderImpl(session)
 
-    is_user_exist = await query.get_user_by_username(create_user.username)
+    is_user_exist = await query.get_user_by_username(create_user.model_dump())
 
     if is_user_exist:
         raise ValueError("User already exist")
@@ -48,7 +48,7 @@ async def login(
     user_reader = UserReaderImpl(session)
     query = UserAccount(session)
 
-    is_user_exist = await user_reader.get_user_by_username(user_login.username)
+    is_user_exist = await user_reader.get_user_by_username(user_login.model_dump())
     if is_user_exist is None:
         raise ValueError("User doesn't exist")
 
@@ -62,5 +62,6 @@ async def login(
 )
 async def logout(
     logout_user: events.LogoutUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> events.LogoutUser:
     return logout_user
