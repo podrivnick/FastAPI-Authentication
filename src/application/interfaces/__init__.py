@@ -1,4 +1,10 @@
-from .user import UsersFilters
+from .user import (
+    UsersAccounts,
+    UsersFilters,
+)
 
 
-__all__ = ("UsersFilters",)
+__all__ = (
+    "UsersFilters",
+    "UsersAccounts",
+)

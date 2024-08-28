@@ -20,6 +20,8 @@ orjson = "^3.10.7"
 adaptix = "^3.0.0b7"
 python-dotenv = "^1.0.1"
 uuid6 = "^2024.7.10"
+fastapi-limiter = "^0.1.6"
+asyncio-redis = "^0.16.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -15,6 +15,15 @@ services:
     command: ["python", "-Om", "src"]
     networks:
       - ppostgres.network
+  redis:
+    image: "redis:7-alpine"
+    container_name: "redis"
+    ports:
+      - "6379:6379"
+    depends_on:
+      - app-drf-authentication
+    networks:
+      - ppostgres.network
 
 networks:
   ppostgres.network:
