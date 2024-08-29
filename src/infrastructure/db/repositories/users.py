@@ -9,6 +9,9 @@ from src.application import (
     dto,
     interfaces,
 )
+from src.application.common import exceptions as exceptions_database
+from src.application.user import exceptions as exceptions_domain
+from src.domain.common.exceptions.base import BaseAppException
 from src.domain.user import events
 from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
@@ -22,8 +25,10 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
         from uuid import uuid4
 
         code = str(uuid4())
-        print("Waiting for redis...")
-        connection = await asyncio_redis.Connection.create(host="redis", port=6379)
+
+        connection = await self._get_redis_connection()
+        if not connection:
+            raise exceptions_database.RedisConnectionError()
 
         key = f"token:{code}"
         await connection.set(key, code)
@@ -36,30 +41,33 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
         self,
         token_schema: events.LogoutUser,
     ) -> bool:
-        is_deleted = False
+        key = f"token:{token_schema.token}"
 
-        print("Waiting for redis...")
+        connection = await self._get_redis_connection()
+        if not connection:
+            raise exceptions_database.RedisConnectionError()
 
         try:
-            connection = await asyncio_redis.Connection.create(host="redis", port=6379)
-            print(f"Looking for token: {token_schema.token}")
-
-            key = f"token:{token_schema.token}"
             is_token_exist = await connection.get(key)
+            if not is_token_exist:
+                raise exceptions_domain.TokenAuthorisationNotFoundException()
 
-            if is_token_exist:
-                print("Deleting token...")
-                await connection.delete([key])
-                is_deleted = True
-            else:
-                print("Token doesn't exist")
-        except Exception as e:
-            print(f"Error interacting with Redis: {e}")
-            raise
+            delete_token = await connection.delete([key])
+            if not delete_token:
+                raise exceptions_domain.TokenAuthorisationNotDeletedException()
+
+            return True
+        except BaseAppException as exception:
+            print(exception.message)
+            return False
         finally:
             connection.close()
 
-        return is_deleted
+    async def _get_redis_connection(self):
+        try:
+            return await asyncio_redis.Connection.create(host="redis", port=6379)
+        except Exception:
+            return None
 
 
 class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
