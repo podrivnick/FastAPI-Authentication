@@ -1,13 +1,25 @@
 from fastapi import (
     APIRouter,
     Depends,
+    status,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.application import dto
 from src.domain.user import events
+from src.domain.user.exceptions.user_exceptions import UserAlreadyExistsExceptions
+from src.domain.user.value_objects.username import (
+    EmptyUsernameError,
+    TooLongUsernameError,
+    WrongUsernameFormatError,
+)
 from src.infrastructure.db.main import get_async_session
 from src.infrastructure.db.repositories.users import (
     UserAccount,
     UserReaderImpl,
+)
+from src.presentation.api.controllers.responses.base import (
+    FailureResponse,
+    SuccessResponse,
 )
 
 
@@ -19,7 +31,18 @@ user_router = APIRouter(
 
 @user_router.post(
     "/create_user",
-    response_model=None,
+    responses={
+        status.HTTP_201_CREATED: {"model": dto.User},
+        status.HTTP_400_BAD_REQUEST: {
+            "model": FailureResponse[
+                TooLongUsernameError | EmptyUsernameError | WrongUsernameFormatError
+            ],
+        },
+        status.HTTP_409_CONFLICT: {
+            "model": FailureResponse[UserAlreadyExistsExceptions],
+        },
+    },
+    status_code=status.HTTP_201_CREATED,
 )
 async def create_user(
     create_user: events.CreateUser,
@@ -30,11 +53,11 @@ async def create_user(
     is_user_exist = await query.get_user_by_username(create_user.model_dump())
 
     if is_user_exist:
-        raise ValueError("User already exist")
+        raise UserAlreadyExistsExceptions(create_user.model_dump()["username"])
 
     add_user = await query.create_user(create_user)
 
-    return {"create_user": add_user}
+    return SuccessResponse(result=add_user)
 
 
 @user_router.post(
