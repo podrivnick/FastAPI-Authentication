@@ -1,9 +1,10 @@
 import asyncio
 
-from src.infrastructure.di.main import (
-    setup_container,
-    setup_db_factories,
-    setup_mediator_factory,
+from src.infrastructure.config_loader import load_config
+from src.infrastructure.di import (
+    DiScope,
+    init_di_builder,
+    setup_di_builder,
 )
 from src.infrastructure.mediator import (
     init_mediator,
@@ -14,17 +15,25 @@ from src.presentation.api.main import (
     run_api,
 )
 
+from .config import (
+    Config,
+    setup_di_builder_config,
+)
+
 
 async def main() -> None:
-    di_builder = setup_container()
-    setup_mediator_factory(di_builder)
-    setup_db_factories(di_builder)
+    config = load_config(Config)
 
-    mediator = await di_builder.resolve(init_mediator)
-    setup_mediator(mediator)
+    di_builder = init_di_builder()
+    setup_di_builder(di_builder)
+    setup_di_builder_config(di_builder, config)
 
-    app = init_api(mediator, di_builder, di_state, False)
-    await run_api(app, config.api)
+    async with di_builder.enter_scope(DiScope.APP) as di_state:
+        mediator = await di_builder.execute(init_mediator, DiScope.APP, state=di_state)
+        setup_mediator(mediator)
+
+        app = init_api(mediator, di_builder, di_state, config.api.debug)
+        await run_api(app, config.api)
 
 
 if __name__ == "__main__":

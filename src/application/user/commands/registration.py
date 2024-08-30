@@ -25,9 +25,9 @@ class CreateUserHandler(CommandHandler[CreateUser, str]):
             command.last_name,
             command.middle_name,
         )
-        value_objects.Password(command.password)
+        password = value_objects.Password(command.password)
 
-        user = User.create_user(username, full_name)
+        user = User.create_user(username, full_name, password)
 
         await self._user_repo.get_user_by_username(user)
         await self._user_repo.add_user(user)

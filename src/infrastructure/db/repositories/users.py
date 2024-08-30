@@ -25,10 +25,7 @@ from src.domain.user import (
     entities,
     events,
 )
-from src.infrastructure.db.converters import (
-    convert_db_model_to_user_entity,
-    convert_user_entity_to_db_model,
-)
+from src.infrastructure.db.converters import convert_user_entity_to_db_model
 from src.infrastructure.db.exception_mapper import exception_mapper
 from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
@@ -128,13 +125,6 @@ class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
         create_user: entities.User,
     ) -> dto.User:
         user_model = convert_user_entity_to_db_model(create_user)
-        user_model = User(
-            username=create_user.username,
-            first_name=create_user.first_name,
-            last_name=create_user.last_name,
-            middle_name=create_user.middle_name,
-            password=create_user.password,
-        )
         self._session.add(user_model)
 
         try:
@@ -147,16 +137,13 @@ class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
         self,
         user: entities.User,
     ) -> dto.User:
-        stmt = select(User).filter_by(username=user.username)
+        username = user.username.to_raw()  # type: ignore  # TODO: fix mypy error
+        user: entities.User | None = await self._session.scalar(
+            select(User).where(User.username == username),
+        )
 
-        await self._session.execute(stmt)
-
-        try:
-            user_filtered = user.scalars().first()
-        except IntegrityError as exception:
-            self._parse_error(exception, user)
-
-        return convert_db_model_to_user_entity(user_filtered)
+        if user:
+            raise UserAlreadyExistsExceptions(username)
 
     def _parse_error(self, err: DBAPIError, user: entities.User) -> NoReturn:
         match err.__cause__.__cause__.constraint_name:  # type: ignore

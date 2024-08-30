@@ -1,8 +1,12 @@
 import uvicorn
+from di import ScopeState
+from didiator import Mediator
+from didiator.interface.utils.di_builder import DiBuilder
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from src.presentation.api.controllers import setup_controllers
+from src.presentation.api.providers import setup_providers
 
 from .config import APIConfig
 
@@ -18,7 +22,10 @@ origins = [
 ]
 
 
-async def init_api(
+def init_api(
+    mediator: Mediator,
+    di_builder: DiBuilder,
+    di_state: ScopeState | None = None,
     debug: bool = __debug__,
 ) -> FastAPI:
     app = FastAPI(
@@ -28,7 +35,6 @@ async def init_api(
         default_response_class=ORJSONResponse,
     )
     setup_providers(app, mediator, di_builder, di_state)
-    setup_controllers(app)
 
     app.add_middleware(
         CORSMiddleware,
@@ -43,6 +49,8 @@ async def init_api(
             "Authorization",
         ],
     )
+
+    setup_controllers(app)
 
     return app
 

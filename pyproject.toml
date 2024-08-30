@@ -53,7 +53,6 @@ ignore = [
     "E501",
     "W503",
     "E800",
-    "F821",
 ]
 exclude = [
     ".git",
@@ -101,7 +100,7 @@ sections=[
 [tool.ruff]
 line-length = 88
 exclude = ["migrations", ".git"]
-lint.extend-ignore = ["E501", "F401", "F821",]
+lint.extend-ignore = ["E501", "F401",]
 lint.select = ["E", "F", "W"]
 
 

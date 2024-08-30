@@ -7,11 +7,10 @@ from src.infrastructure.db import models
 
 def convert_user_entity_to_db_model(user: entities.User) -> models.User:
     return models.User(
-        id=user.id.to_raw(),
         username=user.username.to_raw(),
         first_name=user.full_name.first_name,
         last_name=user.full_name.last_name,
-        password=user.password,  # TODO: hash password before storing
+        password=user.password.to_raw(),  # TODO: hash password before storing
         middle_name=user.full_name.middle_name,
     )
 
