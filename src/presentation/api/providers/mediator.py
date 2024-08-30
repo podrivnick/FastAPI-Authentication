@@ -9,6 +9,9 @@ from .di import get_di_state
 
 
 class MediatorProvider:
+    """The provider associates the current scope of the container and the
+    mediator, since the mediator is created with its own local scope."""
+
     def __init__(self, mediator: Mediator) -> None:
         self._mediator = mediator
 

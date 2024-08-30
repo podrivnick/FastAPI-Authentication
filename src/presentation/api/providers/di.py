@@ -15,6 +15,8 @@ def get_di_state() -> ScopeState:
 
 
 class StateProvider:
+    """Provider designed to create a scope limited by requests."""
+
     def __init__(self, di_state: ScopeState | None = None) -> None:
         self._di_state = di_state
 

@@ -6,6 +6,9 @@ from typing import Never
 
 
 class Stub:
+    """Stub is a battery that hashes the conduct of dependencies, and in doing
+    so is able to conduct new dependencies based on those already hashed."""
+
     def __init__(self, dependency: Callable, **kwargs: Hashable) -> None:
         self._dependency = dependency
         self._kwargs = kwargs
