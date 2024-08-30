@@ -33,7 +33,7 @@ class WrongUsernameFormatError(BaseExceptonUsername):
 
 
 @dataclass(frozen=True)
-class Username(ValueObject[str | None]):
+class UserName(ValueObject[str | None]):
     value: str | None
 
     def _validate(self) -> None:

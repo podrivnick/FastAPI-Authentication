@@ -32,7 +32,7 @@ class FullNameIsNotCorrectFormat(BaseFullNameException):
 
 
 @dataclass(frozen=True)
-class FullName(BaseValueObject[str]):
+class FullName(BaseValueObject):
     first_name: str
     last_name: str
     middle_name: str | None = None

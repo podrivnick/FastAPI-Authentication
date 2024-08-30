@@ -6,7 +6,6 @@ from fastapi import (
     Depends,
     status,
 )
-from sqlalchemy.ext.asyncio import AsyncSession
 from src.application.user import (
     dto,
     exceptions,
@@ -17,7 +16,6 @@ from src.domain.user.value_objects.username import (
     TooLongUsernameError,
     WrongUsernameFormatError,
 )
-from src.infrastructure.db.main import get_async_session
 from src.infrastructure.db.repositories.users import (
     UserAccount,
     UserReaderImpl,
@@ -80,10 +78,10 @@ async def create_user(
 )
 async def login(
     user_login: events.AuthorizeUser,
-    session: AsyncSession = Depends(get_async_session),
+    mediator: Annotated[Mediator, Depends(Stub(Mediator))],
 ) -> SuccessResponse:
     """Зайти в аккаунт."""
-
+    session = ""
     user_reader = UserReaderImpl(session)
     query = UserAccount(session)
 
@@ -112,10 +110,9 @@ async def login(
 )
 async def logout(
     logout_user: events.LogoutUser,
-    session: AsyncSession = Depends(get_async_session),
 ) -> events.LogoutUser:
     """Выйти с аккаунта."""
-
+    session = ""
     query = UserAccount(session)
 
     is_deleted = await query.logout(token_schema=logout_user)

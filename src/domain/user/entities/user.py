@@ -6,7 +6,7 @@ from src.domain.common.entities.aggregate_root import AggregateRoot
 from src.domain.user import value_objects
 
 
-@dataclass(frozen=True)
+@dataclass
 class User(AggregateRoot):
     username: value_objects.UserName
     full_name: value_objects.FullName

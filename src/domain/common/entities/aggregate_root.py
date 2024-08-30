@@ -5,7 +5,7 @@ from dataclasses import (
 )
 
 from src.domain.common.entities import Entity
-from src.domain.common.events.event import Event
+from src.domain.common.events.base import Event
 
 
 @dataclass

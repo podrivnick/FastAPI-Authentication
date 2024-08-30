@@ -29,7 +29,7 @@ from src.infrastructure.db.converters import (
     convert_db_model_to_user_entity,
     convert_user_entity_to_db_model,
 )
-from src.infrastructure.db.exceptions_mapper import exceptions_mapper
+from src.infrastructure.db.exception_mapper import exception_mapper
 from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
 
@@ -122,7 +122,7 @@ class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
 
 
 class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
-    @exceptions_mapper
+    @exception_mapper
     async def add_user(
         self,
         create_user: entities.User,
@@ -142,7 +142,7 @@ class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
         except IntegrityError as exception:
             self._parse_error(exception, create_user)
 
-    @exceptions_mapper
+    @exception_mapper
     async def get_user_by_username(
         self,
         user: entities.User,

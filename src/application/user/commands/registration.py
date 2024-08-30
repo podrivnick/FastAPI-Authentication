@@ -19,7 +19,7 @@ class CreateUserHandler(CommandHandler[CreateUser, str]):
         self,
         command: CreateUser,
     ) -> str:
-        username = value_objects.Username(command.username)
+        username = value_objects.UserName(command.username)
         full_name = value_objects.FullName(
             command.first_name,
             command.last_name,
