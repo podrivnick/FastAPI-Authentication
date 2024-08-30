@@ -6,7 +6,7 @@ from abc import (
 from dataclasses import dataclass
 from typing import Protocol
 
-from src.domain.user import value_objects
+from src.application.user import dto
 from src.domain.user.entities.user import User
 
 
@@ -30,9 +30,9 @@ class UsersAccounts(ABC):
 
 class UserRepo(Protocol):
     @abstractmethod
-    async def add_user(self, user: User):
+    async def add_user(self, user: User) -> dto.User:
         raise NotImplementedError()
 
     @abstractmethod
-    async def filter_by_username(self, username: value_objects.Username):
+    async def get_user_by_username(self, user: User) -> dto.User:
         raise NotImplementedError()

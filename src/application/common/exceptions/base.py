@@ -10,3 +10,12 @@ class ApplicationUserException(BaseAppException):
     @property
     def message(self) -> str:
         return "An error occurred while handling the user's request"
+
+
+@dataclass(frozen=True)
+class RepoException(ApplicationUserException):
+    """Base class for unexpected repository exceptions."""
+
+    @property
+    def message(self) -> str:
+        return "An unexpected error occurred while interacting with the repository"

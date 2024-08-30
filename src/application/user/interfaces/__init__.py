@@ -1,4 +1,5 @@
 from .user import (
+    UserRepo,
     UsersAccounts,
     UsersFilters,
 )
@@ -7,4 +8,5 @@ from .user import (
 __all__ = (
     "UsersFilters",
     "UsersAccounts",
+    "UserRepo",
 )
