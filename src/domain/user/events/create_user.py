@@ -3,9 +3,11 @@ from dataclasses import (
     field,
 )
 
+from src.application.common.base_command import Command
+
 
 @dataclass(frozen=True)
-class CreateUser:
+class CreateUser(Command[str]):
     username: str
     first_name: str
     last_name: str

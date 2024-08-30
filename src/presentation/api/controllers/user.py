@@ -33,6 +33,7 @@ user_router = APIRouter(
 
 @user_router.post(
     "/create_user",
+    description="Эндпоинт Регистрирует пользователя, если пользователь уже есть => Error 409",
     responses={
         status.HTTP_201_CREATED: {"model": dto.User},
         status.HTTP_400_BAD_REQUEST: {
@@ -50,6 +51,8 @@ async def create_user(
     create_user: events.CreateUser,
     session: AsyncSession = Depends(get_async_session),
 ) -> SuccessResponse[dto.User]:
+    """Зарегистрировать аккаунт."""
+
     query = UserReaderImpl(session)
 
     is_user_exist = await query.get_user_by_username(create_user.model_dump())
@@ -66,6 +69,7 @@ async def create_user(
 
 @user_router.post(
     "/authorization",
+    description="Эндпоинт Аутентифицирует и Авторизирует пользователя, если пользователь отсутствует или пароль неверный => Error 409",
     responses={
         status.HTTP_201_CREATED: {"model": dto.User},
         status.HTTP_400_BAD_REQUEST: {
@@ -83,6 +87,8 @@ async def login(
     user_login: events.AuthorizeUser,
     session: AsyncSession = Depends(get_async_session),
 ) -> SuccessResponse:
+    """Зайти в аккаунт."""
+
     user_reader = UserReaderImpl(session)
     query = UserAccount(session)
 
@@ -97,6 +103,7 @@ async def login(
 
 @user_router.delete(
     "/logout",
+    description="Эндпоинт Удаляет Токен Авторизации у пользователя, если токен не найден или не удалён => Error 409",
     responses={
         status.HTTP_201_CREATED: {"model": dto.User},
         status.HTTP_409_CONFLICT: {
@@ -112,6 +119,8 @@ async def logout(
     logout_user: events.LogoutUser,
     session: AsyncSession = Depends(get_async_session),
 ) -> events.LogoutUser:
+    """Выйти с аккаунта."""
+
     query = UserAccount(session)
 
     is_deleted = await query.logout(token_schema=logout_user)
