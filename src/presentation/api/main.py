@@ -27,6 +27,7 @@ async def init_api(
         version="1.0.0",
         default_response_class=ORJSONResponse,
     )
+    setup_providers(app, mediator, di_builder, di_state)
     setup_controllers(app)
 
     app.add_middleware(

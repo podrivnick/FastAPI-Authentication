@@ -1,17 +1,30 @@
 import asyncio
 
-from src.presentation.api.config import APIConfig
+from src.infrastructure.di.main import (
+    setup_container,
+    setup_db_factories,
+    setup_mediator_factory,
+)
+from src.infrastructure.mediator import (
+    init_mediator,
+    setup_mediator,
+)
 from src.presentation.api.main import (
     init_api,
     run_api,
 )
-from src.settings.config import DEBUG
 
 
 async def main() -> None:
-    app = await init_api(DEBUG)
+    di_builder = setup_container()
+    setup_mediator_factory(di_builder)
+    setup_db_factories(di_builder)
 
-    await run_api(app, APIConfig)
+    mediator = await di_builder.resolve(init_mediator)
+    setup_mediator(mediator)
+
+    app = init_api(mediator, di_builder, di_state, False)
+    await run_api(app, config.api)
 
 
 if __name__ == "__main__":
