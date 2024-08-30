@@ -4,7 +4,7 @@ from typing import ClassVar
 from src.application.common.exceptions.base import ApplicationUserException
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class UserOrPasswordIsNotCorrectException(ApplicationUserException):
     """Raised when a user is not found in the database."""
 

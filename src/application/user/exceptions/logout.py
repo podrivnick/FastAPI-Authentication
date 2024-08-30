@@ -4,7 +4,7 @@ from typing import ClassVar
 from src.application.common.exceptions.base import ApplicationUserException
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class TokenAuthorisationNotFoundException(ApplicationUserException):
     """Raised when a token is not found in the database."""
 
@@ -15,7 +15,7 @@ class TokenAuthorisationNotFoundException(ApplicationUserException):
         """Token not found in the database."""
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class TokenAuthorisationNotDeletedException(ApplicationUserException):
     """Raised when a token is not found in the database."""
 

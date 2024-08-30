@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from src.application.common.exceptions.base import ApplicationUserException
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class UserAlreadyExistsExceptions(ApplicationUserException):
     """Raised when a username already exist in the database."""
 

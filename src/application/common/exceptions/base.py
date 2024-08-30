@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from src.domain.common.exceptions.base import BaseAppException
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class ApplicationUserException(BaseAppException):
     """Base class for application user exceptions."""
 
@@ -12,7 +12,7 @@ class ApplicationUserException(BaseAppException):
         return "An error occurred while handling the user's request"
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class RepoException(ApplicationUserException):
     """Base class for unexpected repository exceptions."""
 
@@ -21,7 +21,7 @@ class RepoException(ApplicationUserException):
         return "An unexpected error occurred while interacting with the repository"
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class CommitError(ApplicationUserException):
     """Raised when a commit operation fails."""
 
@@ -30,7 +30,7 @@ class CommitError(ApplicationUserException):
         return "Failed to commit session"
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class RollbackError(ApplicationUserException):
     """Raised when a rollback operation fails."""
 

@@ -13,7 +13,7 @@ class BaseAppException(Exception):
         return "Some Exception in App"
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class DomainException(BaseAppException):
     """Base class for domain exceptions."""
 

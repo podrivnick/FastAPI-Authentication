@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from src.domain.common.exceptions.base import BaseAppException
 
 
-@dataclass(frozen=True)
+@dataclass(eq=False)
 class RedisConnectionError(BaseAppException):
     """Raised when the connection to Redis fails."""
 

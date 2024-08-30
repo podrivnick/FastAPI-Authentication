@@ -1,3 +1,6 @@
+from typing import Annotated
+
+from didiator import Mediator
 from fastapi import (
     APIRouter,
     Depends,
@@ -23,6 +26,7 @@ from src.presentation.api.controllers.responses.base import (
     FailureResponse,
     SuccessResponse,
 )
+from src.presentation.api.providers.stub import Stub
 
 
 user_router = APIRouter(
@@ -48,23 +52,14 @@ user_router = APIRouter(
     status_code=status.HTTP_201_CREATED,
 )
 async def create_user(
-    create_user: events.CreateUser,
-    session: AsyncSession = Depends(get_async_session),
+    create_user_command: events.CreateUser,
+    mediator: Annotated[Mediator, Depends(Stub(Mediator))],
 ) -> SuccessResponse[dto.User]:
     """Зарегистрировать аккаунт."""
 
-    query = UserReaderImpl(session)
+    user_username = await mediator.send(create_user_command)
 
-    is_user_exist = await query.get_user_by_username(create_user.model_dump())
-
-    if is_user_exist:
-        raise exceptions.UserAlreadyExistsExceptions(
-            create_user.model_dump()["username"],
-        )
-
-    add_user = await query.create_user(create_user)
-
-    return SuccessResponse(result=add_user)
+    return SuccessResponse(result=user_username)
 
 
 @user_router.post(
