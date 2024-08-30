@@ -1,11 +1,12 @@
-from .const import DiScope
-
-
-# from .main import init_di_builder, setup_di_builder
+from .main import (
+    init_mediator,
+    setup_mediator,
+)
+from .utils import get_mediator
 
 
 __all__ = (
-    "DiScope",
-    "init_di_builder",
-    "setup_di_builder",
+    "init_mediator",
+    "setup_mediator",
+    "get_mediator",
 )

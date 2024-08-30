@@ -19,3 +19,21 @@ class RepoException(ApplicationUserException):
     @property
     def message(self) -> str:
         return "An unexpected error occurred while interacting with the repository"
+
+
+@dataclass(frozen=True)
+class CommitError(ApplicationUserException):
+    """Raised when a commit operation fails."""
+
+    @property
+    def message(self) -> str:
+        return "Failed to commit session"
+
+
+@dataclass(frozen=True)
+class RollbackError(ApplicationUserException):
+    """Raised when a rollback operation fails."""
+
+    @property
+    def message(self) -> str:
+        return "Failed to rollback session"

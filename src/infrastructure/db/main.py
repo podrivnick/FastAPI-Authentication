@@ -1,26 +1,41 @@
 from collections.abc import AsyncGenerator
 
+import orjson
 from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
+    AsyncEngine,
     AsyncSession,
     create_async_engine,
 )
-from sqlalchemy.pool import NullPool
-from src.settings.config import (
-    POSTGRES_DB,
-    POSTGRES_HOST,
-    POSTGRES_PASSWORD,
-    POSTGRES_PORT,
-    POSTGRES_USER,
-)
+
+from .config import DBConfig
 
 
-DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+async def build_sa_engine(db_config: DBConfig) -> AsyncGenerator[AsyncEngine, None]:
+    engine = create_async_engine(
+        db_config.full_url,
+        echo=True,
+        echo_pool=db_config.echo,
+        json_serializer=lambda data: orjson.dumps(data).decode(),
+        json_deserializer=orjson.loads,
+        pool_size=50,
+    )
+    yield engine
 
-engine = create_async_engine(DATABASE_URL, poolclass=NullPool, future=True)
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+    await engine.dispose()
 
 
-async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session_maker() as session:
+def build_sa_session_factory(engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
+    session_factory = async_sessionmaker(
+        bind=engine,
+        autoflush=False,
+        expire_on_commit=False,
+    )
+    return session_factory
+
+
+async def build_sa_session(
+    session_factory: async_sessionmaker[AsyncSession],
+) -> AsyncGenerator[AsyncSession, None]:
+    async with session_factory() as session:
         yield session

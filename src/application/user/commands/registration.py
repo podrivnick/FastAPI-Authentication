@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
+from didiator import EventMediator
 from src.application.common.base_command import CommandHandler
+from src.application.common.interfaces.uow import UnitOfWork
 from src.application.user.interfaces.user import UserRepo
 from src.domain.user import value_objects
 from src.domain.user.entities.user import User
@@ -10,6 +12,8 @@ from src.domain.user.events.create_user import CreateUser
 @dataclass
 class CreateUserHandler(CommandHandler[CreateUser, str]):
     _user_repo: UserRepo
+    _uow: UnitOfWork
+    _mediator: EventMediator
 
     async def __call__(
         self,
@@ -27,5 +31,9 @@ class CreateUserHandler(CommandHandler[CreateUser, str]):
 
         await self._user_repo.get_user_by_username(user)
         await self._user_repo.add_user(user)
+
+        await self._mediator.publish(user.pull_events())
+
+        await self._uow.commit()
 
         return command.username
