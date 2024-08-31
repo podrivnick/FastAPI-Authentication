@@ -1,3 +1,4 @@
+import asyncio_redis
 from di import (
     bind_by_type,
     Container,
@@ -20,13 +21,17 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 from src.application.common.interfaces.uow import UnitOfWork
-from src.application.user.interfaces.user import UserRepo
+from src.application.user import interfaces
 from src.infrastructure.db.main import (
     build_sa_engine,
     build_sa_session,
     build_sa_session_factory,
 )
-from src.infrastructure.db.repositories.users import UserRepoAlchemyImpl
+from src.infrastructure.db.redis import init_connection_redis
+from src.infrastructure.db.repositories.users import (
+    UserAuthenticationRepoAlchemyImpl,
+    UserRepoAlchemyImpl,
+)
 from src.infrastructure.di.const import DiScope
 from src.infrastructure.mediator import get_mediator
 from src.infrastructure.uow import build_uow
@@ -83,8 +88,21 @@ def setup_db_factories(di_builder: DiBuilder) -> None:
     )
     di_builder.bind(
         bind_by_type(
+            Dependent(init_connection_redis, scope=DiScope.REQUEST),
+            asyncio_redis.Connection,
+        ),
+    )
+    di_builder.bind(
+        bind_by_type(
             Dependent(UserRepoAlchemyImpl, scope=DiScope.REQUEST),
-            UserRepo,
+            interfaces.UserRepo,
+            covariant=True,
+        ),
+    )
+    di_builder.bind(
+        bind_by_type(
+            Dependent(UserAuthenticationRepoAlchemyImpl, scope=DiScope.REQUEST),
+            interfaces.UserAuthenticationRepo,
             covariant=True,
         ),
     )

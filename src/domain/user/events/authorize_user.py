@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from src.application.common.base_command import Command
+
 
 @dataclass(frozen=True)
-class AuthorizeUser:
+class AuthorizeUser(Command[str]):
     username: str
     password: str
 

@@ -11,4 +11,4 @@ class UserOrPasswordIsNotCorrectException(ApplicationUserException):
     status: ClassVar[int] = 404
 
     def message(self):
-        """User not found in the database."""
+        """User not found in the database or password incorrect."""

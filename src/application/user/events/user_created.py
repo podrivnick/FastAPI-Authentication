@@ -13,3 +13,11 @@ class UserCreated(Event):
     last_name: str
     password: str
     middle_name: str = field(default=None)
+
+
+@dataclass(frozen=True)
+class UserAuthenticated(Event):
+    username: str
+    password: str
+    key_authintication_token: str
+    authentication_token: str

@@ -13,7 +13,11 @@ from didiator.middlewares.di import (
     DiScopes,
 )
 from didiator.middlewares.logging import LoggingMiddleware
-from src.application.user.commands import CreateUserHandler
+from src.application.user.commands import (
+    AuthorizeUserHandler,
+    CreateUserHandler,
+)
+from src.domain.user.events.authorize_user import AuthorizeUser
 from src.domain.user.events.create_user import CreateUser
 from src.infrastructure import di
 
@@ -33,3 +37,4 @@ def init_mediator(di_builder: DiBuilder) -> Mediator:
 
 def setup_mediator(mediator: Mediator) -> None:
     mediator.register_command_handler(CreateUser, CreateUserHandler)
+    mediator.register_command_handler(AuthorizeUser, AuthorizeUserHandler)

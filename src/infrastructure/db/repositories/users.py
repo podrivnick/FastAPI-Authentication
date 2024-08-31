@@ -1,8 +1,4 @@
-from typing import (
-    Any,
-    Dict,
-    NoReturn,
-)
+from typing import NoReturn
 
 import asyncio_redis
 from sqlalchemy import select
@@ -10,25 +6,62 @@ from sqlalchemy.exc import (
     DBAPIError,
     IntegrityError,
 )
-from src.application.common import (
-    exceptions,
-    exceptions as exceptions_database,
-)
+from src.application.common import exceptions as exceptions_database
 from src.application.user import (
     dto,
     exceptions as exceptions_domain,
     interfaces,
 )
-from src.application.user.exceptions import UserAlreadyExistsExceptions
 from src.domain.common.exceptions.base import BaseAppException
 from src.domain.user import (
     entities,
     events,
 )
+from src.domain.user.entities.authenticated_user import AuthenticatedUser
 from src.infrastructure.db.converters import convert_user_entity_to_db_model
 from src.infrastructure.db.exception_mapper import exception_mapper
 from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
+
+
+class UserAuthenticationRepoAlchemyImpl(
+    SQLAlchemyRepo,
+    interfaces.UserAuthenticationRepo,
+):
+    @exception_mapper
+    async def authorize(self, user_auth: AuthenticatedUser) -> None:
+        connection_redis = self._connection_redis
+
+        if not connection_redis:
+            raise exceptions_database.RedisConnectionError()
+
+        await connection_redis.set(
+            user_auth.key_authentication_token,
+            user_auth.authentication_token,
+        )
+
+        connection_redis.close()
+
+    @exception_mapper
+    async def verification_user(
+        self,
+        username: str,
+        password: str,
+    ) -> AuthenticatedUser:
+        user: User | None = await self._session.scalar(
+            select(User).where(
+                User.username == username,
+                User.password == password,
+            ),
+        )
+
+        if not user:
+            raise exceptions_domain.UserOrPasswordIsNotCorrectException()
+
+        return AuthenticatedUser.create_authenticated_user(
+            username=username,
+            password=password,
+        )
 
 
 class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
@@ -84,40 +117,6 @@ class UserAccount(SQLAlchemyRepo, interfaces.UsersAccounts):
             return None
 
 
-class UserReaderImpl(SQLAlchemyRepo, interfaces.UsersFilters):
-    async def get_user_by_username(
-        self,
-        filtering_data: Dict[str, Any],
-    ) -> dto.User:
-        stmt = select(User).filter_by(**filtering_data)
-        user = await self._session.execute(stmt)
-
-        result_user = user.scalars().first()
-
-        return result_user
-
-    async def create_user(
-        self,
-        create_user: events.CreateUser,
-    ) -> dto.User:
-        user = User(
-            username=create_user.username,
-            first_name=create_user.first_name,
-            last_name=create_user.last_name,
-            middle_name=create_user.middle_name,
-            password=create_user.password,
-        )
-        self._session.add(user)
-
-        try:
-            await self._session.commit()
-        except Exception:
-            await self._session.rollback()
-            raise
-
-        return user
-
-
 class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
     @exception_mapper
     async def add_user(
@@ -143,11 +142,13 @@ class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
         )
 
         if user:
-            raise UserAlreadyExistsExceptions(username)
+            raise exceptions_domain.UserAlreadyExistsExceptions(username)
 
     def _parse_error(self, err: DBAPIError, user: entities.User) -> NoReturn:
         match err.__cause__.__cause__.constraint_name:  # type: ignore
             case "uq_users_username":
-                raise UserAlreadyExistsExceptions(str(user.username)) from err
+                raise exceptions_domain.UserAlreadyExistsExceptions(
+                    str(user.username),
+                ) from err
             case _:
-                raise exceptions.RepoException from err
+                raise exceptions_database.RepoException from err

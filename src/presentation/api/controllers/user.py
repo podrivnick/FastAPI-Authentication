@@ -16,10 +16,7 @@ from src.domain.user.value_objects.username import (
     TooLongUsernameError,
     WrongUsernameFormatError,
 )
-from src.infrastructure.db.repositories.users import (
-    UserAccount,
-    UserReaderImpl,
-)
+from src.infrastructure.db.repositories.users import UserAccount
 from src.presentation.api.controllers.responses.base import (
     FailureResponse,
     SuccessResponse,
@@ -79,19 +76,12 @@ async def create_user(
 async def login(
     user_login: events.AuthorizeUser,
     mediator: Annotated[Mediator, Depends(Stub(Mediator))],
-) -> SuccessResponse:
+) -> SuccessResponse[str]:
     """Зайти в аккаунт."""
-    session = ""
-    user_reader = UserReaderImpl(session)
-    query = UserAccount(session)
 
-    is_user_exist = await user_reader.get_user_by_username(user_login.model_dump())
-    if is_user_exist is None:
-        raise exceptions.UserOrPasswordIsNotCorrectException()
+    authorisation_token = await mediator.send(user_login)
 
-    authorisation_code = await query.authorize(user_login=user_login)
-
-    return SuccessResponse(result=authorisation_code)
+    return SuccessResponse(result=authorisation_token)
 
 
 @user_router.delete(

@@ -13,3 +13,9 @@ class DBConfig:
     @property
     def full_url(self) -> str:
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+
+@dataclass
+class RedisConfig:
+    host: str = "redis"
+    port: int = 6379
