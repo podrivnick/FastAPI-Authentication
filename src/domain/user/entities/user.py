@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Self
 
-from src.application.user.events.user_created import UserCreated
+from src.application.user.events import UserCreated
 from src.domain.common.entities.aggregate_root import AggregateRoot
 from src.domain.user import value_objects
 

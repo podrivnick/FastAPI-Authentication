@@ -16,7 +16,6 @@ from src.domain.user.value_objects.username import (
     TooLongUsernameError,
     WrongUsernameFormatError,
 )
-from src.infrastructure.db.repositories.users import UserAccount
 from src.presentation.api.controllers.responses.base import (
     FailureResponse,
     SuccessResponse,
@@ -99,12 +98,10 @@ async def login(
     status_code=status.HTTP_201_CREATED,
 )
 async def logout(
-    logout_user: events.LogoutUser,
-) -> events.LogoutUser:
+    logout_user: events.LogoutUserSchema,
+    mediator: Annotated[Mediator, Depends(Stub(Mediator))],
+) -> SuccessResponse[str]:
     """Выйти с аккаунта."""
-    session = ""
-    query = UserAccount(session)
+    user_logout = await mediator.send(logout_user)
 
-    is_deleted = await query.logout(token_schema=logout_user)
-
-    return SuccessResponse(result=is_deleted)
+    return SuccessResponse(result=user_logout)

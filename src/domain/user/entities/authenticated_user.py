@@ -4,7 +4,7 @@ from dataclasses import (
 )
 from typing import Self
 
-from src.application.user.events.user_created import UserAuthenticated
+from src.application.user.events import UserAuthenticated
 from src.domain.common.entities.aggregate_root import AggregateRoot
 
 

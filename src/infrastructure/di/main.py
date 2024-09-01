@@ -30,6 +30,7 @@ from src.infrastructure.db.main import (
 from src.infrastructure.db.redis import init_connection_redis
 from src.infrastructure.db.repositories.users import (
     UserAuthenticationRepoAlchemyImpl,
+    UserLogoutedRepoORMAlchemyImpl,
     UserRepoAlchemyImpl,
 )
 from src.infrastructure.di.const import DiScope
@@ -103,6 +104,13 @@ def setup_db_factories(di_builder: DiBuilder) -> None:
         bind_by_type(
             Dependent(UserAuthenticationRepoAlchemyImpl, scope=DiScope.REQUEST),
             interfaces.UserAuthenticationRepo,
+            covariant=True,
+        ),
+    )
+    di_builder.bind(
+        bind_by_type(
+            Dependent(UserLogoutedRepoORMAlchemyImpl, scope=DiScope.REQUEST),
+            interfaces.UserLogoutedRepo,
             covariant=True,
         ),
     )

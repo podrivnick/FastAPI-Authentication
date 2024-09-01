@@ -21,3 +21,9 @@ class UserAuthenticated(Event):
     password: str
     key_authintication_token: str
     authentication_token: str
+
+
+@dataclass(frozen=True)
+class UserLogouted(Event):
+    auth_token: str
+    auth_key_token: str

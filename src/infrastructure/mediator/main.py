@@ -16,9 +16,11 @@ from didiator.middlewares.logging import LoggingMiddleware
 from src.application.user.commands import (
     AuthorizeUserHandler,
     CreateUserHandler,
+    LogoutUserHandler,
 )
 from src.domain.user.events.authorize_user import AuthorizeUser
 from src.domain.user.events.create_user import CreateUser
+from src.domain.user.events.logout_user import LogoutUserSchema
 from src.infrastructure import di
 
 
@@ -38,3 +40,4 @@ def init_mediator(di_builder: DiBuilder) -> Mediator:
 def setup_mediator(mediator: Mediator) -> None:
     mediator.register_command_handler(CreateUser, CreateUserHandler)
     mediator.register_command_handler(AuthorizeUser, AuthorizeUserHandler)
+    mediator.register_command_handler(LogoutUserSchema, LogoutUserHandler)
