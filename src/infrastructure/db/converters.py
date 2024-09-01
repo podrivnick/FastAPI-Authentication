@@ -10,7 +10,7 @@ def convert_user_entity_to_db_model(user: entities.User) -> models.User:
         username=user.username.to_raw(),
         first_name=user.full_name.first_name,
         last_name=user.full_name.last_name,
-        password=user.password.to_raw(),  # TODO: hash password before storing
+        password=user.password,
         middle_name=user.full_name.middle_name,
     )
 

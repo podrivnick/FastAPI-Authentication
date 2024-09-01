@@ -37,7 +37,7 @@ class Password(ValueObject[str | None]):
     value: str | None
 
     def _validate(self) -> None:
-        if self.value is None:
+        if not self.exists():
             return
 
         if len(self.value) == 0:

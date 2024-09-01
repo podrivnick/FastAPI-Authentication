@@ -7,6 +7,7 @@ from src.domain.user import (
     events,
     value_objects,
 )
+from src.domain.user.entities.authenticated_user import AuthenticatedUser
 
 
 @dataclass
@@ -21,7 +22,7 @@ class AuthorizeUserHandler(CommandHandler[events.AuthorizeUser, str]):
         username = value_objects.UserName(command.username)
         password = value_objects.Password(command.password)
 
-        authenticated_user = await self._user_repo.verification_user(
+        authenticated_user: AuthenticatedUser = await self._user_repo.verification_user(
             username=username.to_raw(),
             password=password.to_raw(),
         )

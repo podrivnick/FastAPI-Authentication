@@ -1,5 +1,6 @@
 from typing import NoReturn
 
+import bcrypt
 from sqlalchemy import select
 from sqlalchemy.exc import (
     DBAPIError,
@@ -47,17 +48,32 @@ class UserAuthenticationRepoAlchemyImpl(
         user: User | None = await self._session.scalar(
             select(User).where(
                 User.username == username,
-                User.password == password,
             ),
         )
 
         if not user:
             raise exceptions_domain.UserOrPasswordIsNotCorrectException()
 
+        self.check_passwords(password, user.password)
+
         return AuthenticatedUser.create_authenticated_user(
             username=username,
             password=password,
         )
+
+    @staticmethod
+    def check_passwords(
+        password_from_input: str,
+        password_db: str,
+    ) -> None:
+        """Use bcrypt to check if password from input matches the stored
+        password."""
+        is_passwords_equal = bcrypt.checkpw(
+            password_from_input.encode("utf-8"),
+            password_db.encode("utf-8"),
+        )
+        if not is_passwords_equal:
+            raise exceptions_domain.UserOrPasswordIsNotCorrectException()
 
 
 class UserLogoutedRepoORMAlchemyImpl(
