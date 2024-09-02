@@ -36,3 +36,7 @@ migrate:
 .PHONY: dbbash
 dbbash:
 	${EXEC} ${DB_CONTAINER} ${ENTER_POSTGRES_CONTAINER}
+
+.PHONY: runtest
+runtest:
+	${EXEC} ${APP_CONTAINER} pytest

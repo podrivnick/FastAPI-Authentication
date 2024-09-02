@@ -26,7 +26,6 @@ class User(AggregateRoot):
         user.record_event(
             UserCreated(
                 username.to_raw(),
-                password,
                 full_name.first_name,
                 full_name.last_name,
                 full_name.middle_name,

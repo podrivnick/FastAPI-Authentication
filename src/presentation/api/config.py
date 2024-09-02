@@ -21,7 +21,6 @@ from src.settings.config import (
 class APIConfig:
     host: str = API_HOST
     port: int = API_PORT
-    reload: bool = True
     debug: bool = __debug__
 
 
