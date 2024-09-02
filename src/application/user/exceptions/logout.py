@@ -12,7 +12,7 @@ class TokenAuthorisationNotFoundException(ApplicationUserException):
 
     @property
     def message(self) -> str:
-        """Token not found in the database."""
+        return "Token not found in the database."
 
 
 @dataclass(eq=False)
@@ -23,4 +23,4 @@ class TokenAuthorisationNotDeletedException(ApplicationUserException):
 
     @property
     def message(self) -> str:
-        """Token not deleted."""
+        return "Token not deleted."

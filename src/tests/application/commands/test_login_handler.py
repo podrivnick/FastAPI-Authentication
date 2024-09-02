@@ -7,10 +7,10 @@ from src.tests.mock.event_mediator import EventMediatorMock
 
 @pytest.mark.asyncio
 async def test_login_handler(
-    user__auth_repo: UserAuthenticationRepoMock,
+    user_auth_repo: UserAuthenticationRepoMock,
     event_mediator: EventMediatorMock,
 ) -> None:
-    handler = AuthorizeUserHandler(user__auth_repo, event_mediator)
+    handler = AuthorizeUserHandler(user_auth_repo, event_mediator)
 
     command = AuthorizeUserSchema(
         username="koshka",
