@@ -7,7 +7,7 @@ from src.application.common.base_command import Command
 
 
 @dataclass(frozen=True)
-class CreateUser(Command[str]):
+class CreateUserSchema(Command[str]):
     username: str
     first_name: str
     last_name: str

@@ -29,9 +29,9 @@ from src.infrastructure.db.main import (
 )
 from src.infrastructure.db.redis import init_connection_redis
 from src.infrastructure.db.repositories.users import (
-    UserAuthenticationRepoAlchemyImpl,
+    UserAuthenticationRepoORMAlchemyImpl,
     UserLogoutedRepoORMAlchemyImpl,
-    UserRepoAlchemyImpl,
+    UserRepoORMAlchemyImpl,
 )
 from src.infrastructure.di.const import DiScope
 from src.infrastructure.mediator import get_mediator
@@ -95,14 +95,14 @@ def setup_db_factories(di_builder: DiBuilder) -> None:
     )
     di_builder.bind(
         bind_by_type(
-            Dependent(UserRepoAlchemyImpl, scope=DiScope.REQUEST),
+            Dependent(UserRepoORMAlchemyImpl, scope=DiScope.REQUEST),
             interfaces.UserRepo,
             covariant=True,
         ),
     )
     di_builder.bind(
         bind_by_type(
-            Dependent(UserAuthenticationRepoAlchemyImpl, scope=DiScope.REQUEST),
+            Dependent(UserAuthenticationRepoORMAlchemyImpl, scope=DiScope.REQUEST),
             interfaces.UserAuthenticationRepo,
             covariant=True,
         ),

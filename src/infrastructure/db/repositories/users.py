@@ -21,7 +21,7 @@ from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
 
 
-class UserAuthenticationRepoAlchemyImpl(
+class UserAuthenticationRepoORMAlchemyImpl(
     SQLAlchemyRepo,
     interfaces.UserAuthenticationRepo,
 ):
@@ -109,7 +109,7 @@ class UserLogoutedRepoORMAlchemyImpl(
         connection.close()
 
 
-class UserRepoAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
+class UserRepoORMAlchemyImpl(SQLAlchemyRepo, interfaces.UserRepo):
     @exception_mapper
     async def add_user(
         self,

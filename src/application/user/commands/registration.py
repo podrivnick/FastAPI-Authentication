@@ -6,18 +6,18 @@ from src.application.common.interfaces.uow import UnitOfWork
 from src.application.user.interfaces.user import UserRepo
 from src.domain.user import value_objects
 from src.domain.user.entities.user import User
-from src.domain.user.events.create_user import CreateUser
+from src.domain.user.events.create_user import CreateUserSchema
 
 
 @dataclass
-class CreateUserHandler(CommandHandler[CreateUser, str]):
+class CreateUserHandler(CommandHandler[CreateUserSchema, str]):
     _user_repo: UserRepo
     _uow: UnitOfWork
     _mediator: EventMediator
 
     async def __call__(
         self,
-        command: CreateUser,
+        command: CreateUserSchema,
     ) -> str:
         username = value_objects.UserName(command.username)
         full_name = value_objects.FullName(

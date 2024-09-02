@@ -11,13 +11,13 @@ from src.domain.user.entities.authenticated_user import AuthenticatedUser
 
 
 @dataclass
-class AuthorizeUserHandler(CommandHandler[events.AuthorizeUser, str]):
+class AuthorizeUserHandler(CommandHandler[events.AuthorizeUserSchema, str]):
     _user_repo: UserAuthenticationRepo
     _mediator: EventMediator
 
     async def __call__(
         self,
-        command: events.AuthorizeUser,
+        command: events.AuthorizeUserSchema,
     ) -> str:
         username = value_objects.UserName(command.username)
         password = value_objects.Password(command.password)

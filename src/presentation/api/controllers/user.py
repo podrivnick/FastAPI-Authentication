@@ -46,7 +46,7 @@ user_router = APIRouter(
     status_code=status.HTTP_201_CREATED,
 )
 async def create_user(
-    create_user_command: events.CreateUser,
+    create_user_command: events.CreateUserSchema,
     mediator: Annotated[Mediator, Depends(Stub(Mediator))],
 ) -> SuccessResponse[dto.User]:
     """Зарегистрировать аккаунт."""
@@ -73,7 +73,7 @@ async def create_user(
     status_code=status.HTTP_201_CREATED,
 )
 async def login(
-    user_login: events.AuthorizeUser,
+    user_login: events.AuthorizeUserSchema,
     mediator: Annotated[Mediator, Depends(Stub(Mediator))],
 ) -> SuccessResponse[str]:
     """Зайти в аккаунт."""

@@ -64,6 +64,7 @@ async def run_api(
         host=api_config.host,
         port=api_config.port,
         reload=True,
+        workers=4,
     )
     server = uvicorn.Server(config)
 
