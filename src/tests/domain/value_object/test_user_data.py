@@ -1,5 +1,9 @@
 import pytest
 from src.domain.user import value_objects as vo
+from src.domain.user.value_objects.auth_token import (
+    AuthTokenIsEmptyException,
+    AuthTokenTooLongException,
+)
 from src.domain.user.value_objects.password import (
     EmptyPasswordError,
     TooLongPasswordError,
@@ -40,3 +44,14 @@ def test_password_is_valid():
 
     with pytest.raises(WrongPasswordFormatError):
         vo.Password(password_wrong_format)
+
+
+def test_auth_token_is_valid():
+    auth_token_empty = ""
+    auth_token_is_too_long = "fdsdf3"
+
+    with pytest.raises(AuthTokenIsEmptyException):
+        vo.AuthToken(auth_token_empty)
+
+    with pytest.raises(AuthTokenTooLongException):
+        vo.AuthToken(auth_token_is_too_long * 200)
