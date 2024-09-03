@@ -17,3 +17,7 @@ DEBUG = os.environ.get("DEBUG")
 
 API_PORT = int(os.environ.get("API_PORT"))
 API_HOST = os.environ.get("API_HOST")
+
+EXPIRE_TIME_OF_AUTHENTICATION_TOKEN = int(
+    os.environ.get("EXPIRE_TIME_OF_AUTHENTICATION_TOKEN"),
+)

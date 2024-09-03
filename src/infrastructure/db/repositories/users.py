@@ -19,6 +19,7 @@ from src.infrastructure.db.converters import convert_user_entity_to_db_model
 from src.infrastructure.db.exception_mapper import exception_mapper
 from src.infrastructure.db.models.user import User
 from src.infrastructure.db.repositories.base import SQLAlchemyRepo
+from src.settings.config import EXPIRE_TIME_OF_AUTHENTICATION_TOKEN
 
 
 class UserAuthenticationRepoORMAlchemyImpl(
@@ -35,6 +36,7 @@ class UserAuthenticationRepoORMAlchemyImpl(
         await connection_redis.set(
             user_auth.key_authentication_token,
             user_auth.authentication_token,
+            expire=EXPIRE_TIME_OF_AUTHENTICATION_TOKEN,
         )
 
         connection_redis.close()
