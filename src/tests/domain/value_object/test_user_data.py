@@ -4,6 +4,11 @@ from src.domain.user.value_objects.auth_token import (
     AuthTokenIsEmptyException,
     AuthTokenTooLongException,
 )
+from src.domain.user.value_objects.full_name import (
+    FullNameIsEmpty,
+    FullNameIsNotCorrectFormat,
+    FullNameTooLong,
+)
 from src.domain.user.value_objects.password import (
     EmptyPasswordError,
     TooLongPasswordError,
@@ -55,3 +60,22 @@ def test_auth_token_is_valid():
 
     with pytest.raises(AuthTokenTooLongException):
         vo.AuthToken(auth_token_is_too_long * 200)
+
+
+@pytest.mark.parametrize(
+    "first_name, last_name, fullname, expected_exception",
+    [
+        ("Artem", "Rybakov", "", FullNameIsEmpty),
+        ("Artem", "Rybakov", "Artem Rybakov" * 200, FullNameTooLong),
+        ("Artem", "Rybakov", "__@@fullname", FullNameIsNotCorrectFormat),
+        ("", "Rybakov", "Artem Rybakov", FullNameIsEmpty),
+        ("Artem" * 200, "Rybakov", "Artem Rybakov", FullNameTooLong),
+        ("___##@@~~Artem", "Rybakov", "Artem Rybakov", FullNameIsNotCorrectFormat),
+        ("Artem", "", "Artem Rybakov", FullNameIsEmpty),
+        ("Artem", "Rybakov" * 200, "Artem Rybakov", FullNameTooLong),
+        ("Artem", "___##@@~~Rybakov", "Artem Rybakov", FullNameIsNotCorrectFormat),
+    ],
+)
+def test_fullname_is_valid(first_name, last_name, fullname, expected_exception):
+    with pytest.raises(expected_exception):
+        vo.FullName(first_name, last_name, fullname)
