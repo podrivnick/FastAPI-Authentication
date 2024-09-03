@@ -16,19 +16,19 @@ class BaseExceptonUsername(ValueError, DomainException):
 
 class EmptyUsernameError(BaseExceptonUsername):
     @property
-    def title(self) -> str:
+    def message(self) -> str:
         return "Username can't be empty"
 
 
 class TooLongUsernameError(BaseExceptonUsername):
     @property
-    def title(self) -> str:
+    def message(self) -> str:
         return f'Too long username "{self.username}"'
 
 
 class WrongUsernameFormatError(BaseExceptonUsername):
     @property
-    def title(self) -> str:
+    def message(self) -> str:
         return f'Wrong username format "{self.username}"'
 
 
@@ -36,7 +36,7 @@ class WrongUsernameFormatError(BaseExceptonUsername):
 class UserName(ValueObject[str | None]):
     value: str | None
 
-    def _validate(self) -> None:
+    def validate(self) -> None:
         if self.value is None:
             return
 

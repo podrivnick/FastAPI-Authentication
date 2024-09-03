@@ -21,7 +21,7 @@ async def test_create_user_handler(
         username="koshka",
         first_name="ghan",
         last_name="gog",
-        password="233sdad34",
+        password="Password1",
         middle_name="ghan gog",
     )
 

@@ -5,7 +5,7 @@ from src.domain.user.entities.logout_user import LogoutUser
 
 class UserLogoutedRepoMock(UserLogoutedRepo):
     def __init__(self) -> None:
-        self.token = "sfdsdfsdfs6df6sd6f53e6edf63ws6efesf"
+        self.token = "sfdsdfsdfs6df6sd"
 
     async def get_key_authentication_token(
         self,

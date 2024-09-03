@@ -30,7 +30,7 @@ class AuthTokenTooLongException(BaseAuthTokenException):
 class AuthToken(ValueObject[str | None]):
     value: str | None
 
-    def _validate(self) -> None:
+    def validate(self) -> None:
         if len(self.value) == 0:
             raise AuthTokenIsEmptyException()
         if len(self.value) > MAX_AUTH_TOKEN_LENGTH:

@@ -1,4 +1,7 @@
-from abc import ABC
+from abc import (
+    ABC,
+    abstractmethod,
+)
 from dataclasses import dataclass
 from typing import (
     Any,
@@ -12,11 +15,12 @@ V = TypeVar("V", bound=Any)
 
 @dataclass(frozen=True)
 class BaseValueObject(ABC):
-    def __post__init__(self, value) -> None:
-        self._validate()
+    def __post_init__(self) -> None:
+        self.validate()
 
-    def _validate(self) -> None:
-        """Check the value in value object."""
+    @abstractmethod
+    def validate(self) -> None:
+        raise NotImplementedError()
 
 
 @dataclass(frozen=True)

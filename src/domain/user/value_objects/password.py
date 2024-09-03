@@ -36,7 +36,7 @@ class WrongPasswordFormatError(BaseExceptonPassword):
 class Password(ValueObject[str | None]):
     value: str | None
 
-    def _validate(self) -> None:
+    def validate(self) -> None:
         if not self.exists():
             return
 

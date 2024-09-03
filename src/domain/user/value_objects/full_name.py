@@ -37,7 +37,7 @@ class FullName(BaseValueObject):
     last_name: str
     middle_name: str | None = None
 
-    def _validate(self) -> None:
+    def validate(self) -> None:
         if len(self.first_name) == 0:
             raise FullNameIsEmpty(self.first_name, "First name can't be empty")
         if len(self.first_name) > MAX_NAME_LENGTH:

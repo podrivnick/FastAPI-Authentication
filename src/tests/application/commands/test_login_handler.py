@@ -14,7 +14,7 @@ async def test_login_handler(
 
     command = AuthorizeUserSchema(
         username="koshka",
-        password="233sdad341",
+        password="Password1",
     )
 
     authentication_token = await handler(command)
