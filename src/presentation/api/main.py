@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import ORJSONResponse
 from src.presentation.api.controllers import setup_controllers
+from src.presentation.api.middlewares.main import setup_middleware
 from src.presentation.api.providers import setup_providers
 
 from .config import APIConfig
@@ -35,6 +36,7 @@ def init_api(
         default_response_class=ORJSONResponse,
     )
     setup_providers(app, mediator, di_builder, di_state)
+    setup_middleware(app)
 
     app.add_middleware(
         CORSMiddleware,
