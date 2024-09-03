@@ -5,19 +5,19 @@ from src.domain.user.value_objects.auth_token import (
     AuthTokenTooLongException,
 )
 from src.domain.user.value_objects.full_name import (
-    FullNameIsEmpty,
-    FullNameIsNotCorrectFormat,
-    FullNameTooLong,
+    FullNameIsEmptyException,
+    FullNameIsNotCorrectFormatException,
+    FullNameTooLongException,
 )
 from src.domain.user.value_objects.password import (
-    EmptyPasswordError,
-    TooLongPasswordError,
-    WrongPasswordFormatError,
+    EmptyPasswordException,
+    TooLongPasswordException,
+    WrongPasswordException,
 )
 from src.domain.user.value_objects.username import (
-    EmptyUsernameError,
-    TooLongUsernameError,
-    WrongUsernameFormatError,
+    EmptyUsernameException,
+    TooLongUsernameException,
+    WrongUsernameFormatException,
 )
 
 
@@ -26,13 +26,13 @@ def test_username_is_valid():
     username_empty = ""
     username_wrong__format = "_gfdgdsfgr@@"
 
-    with pytest.raises(TooLongUsernameError):
+    with pytest.raises(TooLongUsernameException):
         vo.UserName(username_too__much__text * 200)
 
-    with pytest.raises(EmptyUsernameError):
+    with pytest.raises(EmptyUsernameException):
         vo.UserName(username_empty)
 
-    with pytest.raises(WrongUsernameFormatError):
+    with pytest.raises(WrongUsernameFormatException):
         vo.UserName(username_wrong__format)
 
 
@@ -41,13 +41,13 @@ def test_password_is_valid():
     password_is_too_long = "Passweodsffveedffffffffffffffffffffffffffffffffffxdfdf2"
     password_wrong_format = "3445343434"
 
-    with pytest.raises(EmptyPasswordError):
+    with pytest.raises(EmptyPasswordException):
         vo.Password(password_empty)
 
-    with pytest.raises(TooLongPasswordError):
+    with pytest.raises(TooLongPasswordException):
         vo.Password(password_is_too_long)
 
-    with pytest.raises(WrongPasswordFormatError):
+    with pytest.raises(WrongPasswordException):
         vo.Password(password_wrong_format)
 
 
@@ -65,15 +65,25 @@ def test_auth_token_is_valid():
 @pytest.mark.parametrize(
     "first_name, last_name, fullname, expected_exception",
     [
-        ("Artem", "Rybakov", "", FullNameIsEmpty),
-        ("Artem", "Rybakov", "Artem Rybakov" * 200, FullNameTooLong),
-        ("Artem", "Rybakov", "__@@fullname", FullNameIsNotCorrectFormat),
-        ("", "Rybakov", "Artem Rybakov", FullNameIsEmpty),
-        ("Artem" * 200, "Rybakov", "Artem Rybakov", FullNameTooLong),
-        ("___##@@~~Artem", "Rybakov", "Artem Rybakov", FullNameIsNotCorrectFormat),
-        ("Artem", "", "Artem Rybakov", FullNameIsEmpty),
-        ("Artem", "Rybakov" * 200, "Artem Rybakov", FullNameTooLong),
-        ("Artem", "___##@@~~Rybakov", "Artem Rybakov", FullNameIsNotCorrectFormat),
+        ("Artem", "Rybakov", "", FullNameIsEmptyException),
+        ("Artem", "Rybakov", "Artem Rybakov" * 200, FullNameTooLongException),
+        ("Artem", "Rybakov", "__@@fullname", FullNameIsNotCorrectFormatException),
+        ("", "Rybakov", "Artem Rybakov", FullNameIsEmptyException),
+        ("Artem" * 200, "Rybakov", "Artem Rybakov", FullNameTooLongException),
+        (
+            "___##@@~~Artem",
+            "Rybakov",
+            "Artem Rybakov",
+            FullNameIsNotCorrectFormatException,
+        ),
+        ("Artem", "", "Artem Rybakov", FullNameIsEmptyException),
+        ("Artem", "Rybakov" * 200, "Artem Rybakov", FullNameTooLongException),
+        (
+            "Artem",
+            "___##@@~~Rybakov",
+            "Artem Rybakov",
+            FullNameIsNotCorrectFormatException,
+        ),
     ],
 )
 def test_fullname_is_valid(first_name, last_name, fullname, expected_exception):

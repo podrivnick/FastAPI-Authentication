@@ -10,23 +10,23 @@ USERNAME_PATTERN = re.compile(r"[A-Za-z][A-Za-z1-9_]+")
 
 
 @dataclass(eq=False)
-class BaseExceptonUsername(ValueError, DomainException):
+class BaseUsernameException(ValueError, DomainException):
     username: str
 
 
-class EmptyUsernameError(BaseExceptonUsername):
+class EmptyUsernameException(BaseUsernameException):
     @property
     def message(self) -> str:
         return "Username can't be empty"
 
 
-class TooLongUsernameError(BaseExceptonUsername):
+class TooLongUsernameException(BaseUsernameException):
     @property
     def message(self) -> str:
         return f'Too long username "{self.username}"'
 
 
-class WrongUsernameFormatError(BaseExceptonUsername):
+class WrongUsernameFormatException(BaseUsernameException):
     @property
     def message(self) -> str:
         return f'Wrong username format "{self.username}"'
@@ -41,13 +41,13 @@ class UserName(ValueObject[str | None]):
             return
 
         if len(self.value) == 0:
-            raise EmptyUsernameError(self.value)
+            raise EmptyUsernameException(self.value)
 
         if len(self.value) > MAX_USERNAME_LENGTH:
-            raise TooLongUsernameError(self.value)
+            raise TooLongUsernameException(self.value)
 
         if not USERNAME_PATTERN.match(self.value):
-            raise WrongUsernameFormatError(self.value)
+            raise WrongUsernameFormatException(self.value)
 
     def exists(self) -> bool:
         return self.value is not None

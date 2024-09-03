@@ -19,15 +19,15 @@ class BaseFullNameException(ValueError, DomainException):
         return f"{self.text_exception} in - {self.name}"
 
 
-class FullNameIsEmpty(BaseFullNameException):
+class FullNameIsEmptyException(BaseFullNameException):
     pass
 
 
-class FullNameTooLong(BaseFullNameException):
+class FullNameTooLongException(BaseFullNameException):
     pass
 
 
-class FullNameIsNotCorrectFormat(BaseFullNameException):
+class FullNameIsNotCorrectFormatException(BaseFullNameException):
     pass
 
 
@@ -39,41 +39,44 @@ class FullName(BaseValueObject):
 
     def validate(self) -> None:
         if len(self.first_name) == 0:
-            raise FullNameIsEmpty(self.first_name, "First name can't be empty")
+            raise FullNameIsEmptyException(self.first_name, "First name can't be empty")
         if len(self.first_name) > MAX_NAME_LENGTH:
-            raise FullNameTooLong(
+            raise FullNameTooLongException(
                 self.first_name,
                 f'Too long first name "{self.first_name}"',
             )
         if NAME_PATTERN.match(self.first_name) is None:
-            raise FullNameIsNotCorrectFormat(
+            raise FullNameIsNotCorrectFormatException(
                 self.first_name,
                 f'Wrong first name format "{self.first_name}"',
             )
 
         if len(self.last_name) == 0:
-            raise FullNameIsEmpty(self.last_name, "Last name can't be empty")
+            raise FullNameIsEmptyException(self.last_name, "Last name can't be empty")
         if len(self.last_name) > MAX_NAME_LENGTH:
-            raise FullNameTooLong(
+            raise FullNameTooLongException(
                 self.last_name,
                 f'Too long last name "{self.last_name}"',
             )
         if NAME_PATTERN.match(self.last_name) is None:
-            raise FullNameIsNotCorrectFormat(
+            raise FullNameIsNotCorrectFormatException(
                 self.last_name,
                 f'Wrong last name format "{self.last_name}"',
             )
 
         if self.middle_name is not None:
             if len(self.middle_name) == 0:
-                raise FullNameIsEmpty(self.middle_name, "Middle name can't be empty")
+                raise FullNameIsEmptyException(
+                    self.middle_name,
+                    "Middle name can't be empty",
+                )
             if len(self.middle_name) > MAX_NAME_LENGTH:
-                raise FullNameTooLong(
+                raise FullNameTooLongException(
                     self.middle_name,
                     f'Too long middle name "{self.middle_name}"',
                 )
             if NAME_PATTERN.match(self.middle_name) is None:
-                raise FullNameIsNotCorrectFormat(
+                raise FullNameIsNotCorrectFormatException(
                     self.middle_name,
                     f'Wrong middle name format "{self.middle_name}"',
                 )

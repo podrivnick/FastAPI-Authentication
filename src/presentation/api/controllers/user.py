@@ -12,9 +12,9 @@ from src.application.user import (
 )
 from src.domain.user import events
 from src.domain.user.value_objects.username import (
-    EmptyUsernameError,
-    TooLongUsernameError,
-    WrongUsernameFormatError,
+    EmptyUsernameException,
+    TooLongUsernameException,
+    WrongUsernameFormatException,
 )
 from src.presentation.api.controllers.responses.base import (
     FailureResponse,
@@ -36,7 +36,9 @@ user_router = APIRouter(
         status.HTTP_201_CREATED: {"model": dto.User},
         status.HTTP_400_BAD_REQUEST: {
             "model": FailureResponse[
-                TooLongUsernameError | EmptyUsernameError | WrongUsernameFormatError
+                TooLongUsernameException
+                | EmptyUsernameException
+                | WrongUsernameFormatException
             ],
         },
         status.HTTP_409_CONFLICT: {
@@ -63,7 +65,9 @@ async def create_user(
         status.HTTP_201_CREATED: {"model": dto.User},
         status.HTTP_400_BAD_REQUEST: {
             "model": FailureResponse[
-                TooLongUsernameError | EmptyUsernameError | WrongUsernameFormatError
+                TooLongUsernameException
+                | EmptyUsernameException
+                | WrongUsernameFormatException
             ],
         },
         status.HTTP_409_CONFLICT: {

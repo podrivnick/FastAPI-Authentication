@@ -5,6 +5,8 @@ A non-commercial FastAPI project for user registration, authentication and autho
 
 These instructions will help you run the project.
 
+![API](image_API/API's.jpg)
+
 ## Requirements
 
 Ensure you have the following software installed:
@@ -35,10 +37,9 @@ ___
 
 ### Specific Commands
 
-* `make storages` - up only storages. you should run your application locally for debugging/developing purposes
-* `make storages-logs` - follow the logs in storages containers
-* `make storages-down` - down all infrastructure
-* `make appbash` - enter into application container
+* `make appbash` - enter into application container bash
+* `make dbbash` - enter into postgres container bash
+* `make runtest` - run all tests
 
 ___
 ## Structure
@@ -51,14 +52,17 @@ FastAPI-Authentication/
 + **FastAPI**
 + **Python**
 + **Docker**
++ **Redis**
++ **Postgres**
 
 ___
 ## Design Patterns
-+ **Authentication and Authorization** (JWT)
++ **Authentication and Authorization** (Session)
 + **Repository Pattern**
 + **Configuration Management** (dotenv)
 + **Factory Pattern**
-+ **Dependency Injection**: (Depends)
++ **Dependency Injection**
++ **Mediator** (Didiator)
 
 ## Author
 Author of the backend: ***Rybakov Artem***  (https://github.com/podrivnick)
